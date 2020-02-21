@@ -12,7 +12,7 @@ las que encontrarás en este mismo repositorio, estos archivos deben ir en la mi
 
 ### Instalación
 
-Para usar el control puedes descargar la ultima release (OCX) copiarla a lacarpeta Windows/System si tu sistema es x32 o Windows/SysWOW64 si tu sistema es x64, y registrarlo con REGSVR32
+Para usar el control puedes descargar la ultima release (OCX) liberada en este repositorio y copiarla a la carpeta Windows/System si tu sistema es x32 o Windows/SysWOW64 si tu sistema es x64, y registrarlo con REGSVR32
 
 Windows 32bit
 ```
