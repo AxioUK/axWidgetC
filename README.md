@@ -1,12 +1,12 @@
 # axWidgetC
-VB6 Widget UserControl, version modificada del control Firenze Label [VBForum]
+VB6 Widget UserControl, version modificada del control Firenze Label de Martin Vartiak publicada en [VBForum]
 
-## Prerequisites
+## Prerequisitos
 
 Este control tiene las siguientes dependecias:
 ```
-vbRichClient5.dll
-vb_cairo_sqlite.dll
+* vbRichClient5.dll
+* vb_cairo_sqlite.dll
 ```
 las que encontrarás en este mismo repositorio, estos archivos deben ir en la misma carpeta que el OCX o en la Carpeta raiz de tu proyecto si prefieres usar el UserControl sin compilar.
 
