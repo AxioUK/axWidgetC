@@ -10,74 +10,34 @@ Este control tiene las siguientes dependecias:
 ```
 las que encontrarás en este mismo repositorio, estos archivos deben ir en la misma carpeta que el OCX o en la Carpeta raiz de tu proyecto si prefieres usar el UserControl sin compilar.
 
-### Installing
+### Instalación
 
-A step by step series of examples that tell you how to get a development env running
+Para usar el control puedes descargar la ultima release (OCX) copiarla a lacarpeta Windows/System si tu sistema es x32 o Windows/SysWOW64 si tu sistema es x64, y registrarlo con REGSVR32
 
-Say what the step will be
-
+Windows 32bit
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+C:\Windows\System\Regsvr32 axWidgetc.ocx
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+Windows 64bit
 ```
-Give an example
+C:\Windows\SysWOW64\Regsvr32 axWidgetc.ocx
 ```
 
-### And coding style tests
+No debes olvidar copiar los archivos: vbRichClient5.dll y vb_cairo_sqlite.dll, igualmente en la misma carpeta que el OCX y registralos de la misma forma
 
-Explain what these tests test and why
-
+Windows 32bit
 ```
-Give an example
+C:\Windows\System\Regsvr32 vbRichClient5.dll
+C:\Windows\System\Regsvr32 vb_cairo_sqlite.dll
 ```
 
-## Deployment
+Windows 64bit
+```
+C:\Windows\SysWOW64\Regsvr32 vbRichClient5.dll
+C:\Windows\SysWOW64\Regsvr32 vb_cairo_sqlite.dll
+```
 
-Add additional notes about how to deploy this on a live system
+Ya con eso el control estará disponible para su uso con VB6.
 
-## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
