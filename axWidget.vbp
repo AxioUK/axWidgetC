@@ -1,6 +1,6 @@
 Type=Control
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
-Reference=*\G{C79C91A4-10F5-4F71-A490-3B7915514344}#2.6#0#..\..\..\OCX\vbRichClient5.dll#vbRichClient5
+Reference=*\G{C79C91A4-10F5-4F71-A490-3B7915514344}#2.6#0#..\..\Programming Folder\OCX\vbRichClient5.dll#vbRichClient5
 Reference=*\G{3F4DACA7-160D-11D2-A8E9-00104B365C9F}#5.5#0#C:\Windows\SysWOW64\vbscript.dll\3#Microsoft VBScript Regular Expressions 5.5
 UserControl=axWidget2.ctl
 PropertyPage=PagWidget2.pag

@@ -10,6 +10,12 @@ Begin VB.UserControl axWidgetc
    Tag             =   "Not Over"
    ToolboxBitmap   =   "axWidget2.ctx":0010
    Windowless      =   -1  'True
+   Begin VB.Timer tmrGlow 
+      Enabled         =   0   'False
+      Interval        =   50
+      Left            =   555
+      Top             =   195
+   End
    Begin VB.Timer tmrMOUSEOVER 
       Enabled         =   0   'False
       Interval        =   10
@@ -24,7 +30,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Const AppVersion = "1.2.6"
+Const AppVersion = "1.2.7"
 
 
 Private Declare Function GdiAlphaBlend& Lib "gdi32" (ByVal hDC&, ByVal X&, ByVal Y&, ByVal dx&, ByVal dy&, ByVal hdcSrc&, ByVal srcx&, ByVal srcy&, ByVal SrcdX&, ByVal SrcdY&, ByVal lBlendFunction&)
@@ -113,6 +119,7 @@ End Enum
 
 
 'Default Property Values:
+Const m_def_Glowing = False
 Const m_def_BackColor = &H8000000F
 Const m_def_BackColorOpacity = 100
 Const m_def_BackColorP = &HC0C0C0
@@ -161,6 +168,7 @@ Const m_def_WordWrap = True
 
 
 'Property Variables:
+Dim m_Glowing As Boolean
 Dim m_BackColor As OLE_COLOR
 Dim m_BackColorOpacity As Integer
 Dim m_BackColorP As OLE_COLOR
@@ -175,6 +183,8 @@ Dim m_BorderPosition As BorderPosition
 Dim m_BorderRadius As Integer
 Dim m_BorderSmoothEdge As Boolean
 Dim m_BorderWidth As Integer
+Dim m_BorderGlow As Integer
+Dim m_OldBorderWidth As Integer
 Dim m_Caption1() As Byte
 Dim m_Caption2() As Byte
 Dim m_CaptionAlignmentH As CaptionAlignmentH
@@ -644,6 +654,20 @@ Private Function RemoveExtraSpaces(strVal As String) As String
     RemoveExtraSpaces = Trim(regEx.Replace(strVal, " "))
 End Function
 
+Private Sub tmrGlow_Timer()
+If m_Glowing And m_BorderGlow <= 10 Then
+  'm_BorderPosition = bpOutside
+  m_BorderGlow = m_BorderGlow + 1
+  m_BorderWidth = m_BorderGlow
+  m_BorderColorOpacity = 100 - (m_BorderGlow * 10)
+  Refresh
+Else
+  m_BorderGlow = 1
+  m_BorderWidth = m_BorderGlow
+  m_BorderColorOpacity = 60
+End If
+End Sub
+
 Private Sub tmrMOUSEOVER_Timer()
 If isDrawed And Not IsMouseInExtender Then Exit Sub
 
@@ -773,6 +797,7 @@ Private Sub UserControl_InitProperties()
     
     c_lhWnd = UserControl.ContainerHwnd
 
+  m_Glowing = m_def_Glowing
 End Sub
 
 Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
@@ -825,8 +850,8 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     m_BorderWidth = PropBag.ReadProperty("BorderWidth", m_def_BorderWidth)
     m_CaptionAlignmentH = PropBag.ReadProperty("CaptionAlignmentH", m_def_CaptionAlignmentH)
     m_CaptionAlignmentV = PropBag.ReadProperty("CaptionAlignmentV", m_def_CaptionAlignmentV)
-    m_Caption1 = PropBag.ReadProperty("Caption1", m_def_Caption)
-    m_Caption2 = PropBag.ReadProperty("Caption2", m_def_Caption)
+    m_Caption1 = PropBag.ReadProperty("CaptionSub", m_def_Caption)
+    m_Caption2 = PropBag.ReadProperty("CaptionMain", m_def_Caption)
     m_CaptionPadding = PropBag.ReadProperty("CaptionPadding", m_def_CaptionPadding)
     m_ChangeColorOnClick = PropBag.ReadProperty("ChangeColorOnClick", m_def_ChangeColorOnClick)
     m_ChangeBorderColorOnMouseOver = PropBag.ReadProperty("ChangeBorderColorOnMouseOver", m_def_ChangeBorderColorOnMouseOver)
@@ -857,8 +882,9 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     m_PictureSVGScale = PropBag.ReadProperty("PictureSVGScale", m_def_PictureSVGScale)
     m_Value = PropBag.ReadProperty("Value", m_def_Value)
     m_WordWrap = PropBag.ReadProperty("WordWrap", m_def_WordWrap)
-    m_FontMinus = PropBag.ReadProperty("Caption1SizeMinus", 5)
-    m_C1VDistance = PropBag.ReadProperty("Caption1VDistance", 20)
+    m_FontMinus = PropBag.ReadProperty("CaptionSubSizeMinus", 5)
+    m_C1VDistance = PropBag.ReadProperty("CaptionSubVDistance", 20)
+  m_Glowing = PropBag.ReadProperty("Glowing", m_def_Glowing)
 End Sub
 
 Private Sub UserControl_Resize()
@@ -903,8 +929,8 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("BorderWidth", m_BorderWidth, m_def_BorderWidth)
     Call PropBag.WriteProperty("CaptionAlignmentH", m_CaptionAlignmentH, m_def_CaptionAlignmentH)
     Call PropBag.WriteProperty("CaptionAlignmentV", m_CaptionAlignmentV, m_def_CaptionAlignmentV)
-    Call PropBag.WriteProperty("Caption1", m_Caption1, m_def_Caption)
-    Call PropBag.WriteProperty("Caption2", m_Caption2, m_def_Caption)
+    Call PropBag.WriteProperty("CaptionSub", m_Caption1, m_def_Caption)
+    Call PropBag.WriteProperty("CaptionMain", m_Caption2, m_def_Caption)
     Call PropBag.WriteProperty("CaptionPadding", m_CaptionPadding, m_def_CaptionPadding)
         Call PropBag.WriteProperty("ForeColorOnPress", m_ForeColorP, m_def_ForeColorP)
         Call PropBag.WriteProperty("ForeColorOnPressOpacity", m_ForeColorPOpacity, m_def_ForeColorPOpacity)
@@ -936,8 +962,9 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("PictureSVGScale", m_PictureSVGScale, m_def_PictureSVGScale)
     Call PropBag.WriteProperty("Value", m_Value, m_def_Value)
     Call PropBag.WriteProperty("WordWrap", m_WordWrap, m_def_WordWrap)
-    Call PropBag.WriteProperty("Caption1SizeMinus", m_FontMinus, 5)
-    Call PropBag.WriteProperty("Caption1VDistance", m_C1VDistance, 20)
+    Call PropBag.WriteProperty("CaptionSubSizeMinus", m_FontMinus, 5)
+    Call PropBag.WriteProperty("CaptionSubVDistance", m_C1VDistance, 20)
+  Call PropBag.WriteProperty("Glowing", m_Glowing, m_def_Glowing)
 End Sub
 
 '===== PUBLIC PROPERTIES ===== =============================== PROPERTIES ====================================== PROPERTIES ================================================
@@ -1137,50 +1164,49 @@ Public Property Let BorderWidth(ByVal New_BorderWidth As Integer)
     
     m_BorderWidth = New_BorderWidth
     PropertyChanged "BorderWidth"
-    
-    
+    m_OldBorderWidth = m_BorderWidth
     Refresh
 End Property
 
-Public Property Get Caption1() As String
-    Caption1 = m_Caption1
+Public Property Get CaptionSub() As String
+    CaptionSub = m_Caption1
 End Property
 
-Public Property Let Caption1(ByVal New_Caption As String)
+Public Property Let CaptionSub(ByVal New_Caption As String)
     m_Caption1 = New_Caption
-    PropertyChanged "Caption1"
+    PropertyChanged "CaptionSub"
 
     Refresh
     Call Change(m_Caption1)
 End Property
 
-Public Property Get Caption1SizeMinus() As Integer
-  Caption1SizeMinus = m_FontMinus
+Public Property Get CaptionSubSizeMinus() As Integer
+  CaptionSubSizeMinus = m_FontMinus
 End Property
 
-Public Property Let Caption1SizeMinus(ByVal newSize As Integer)
+Public Property Let CaptionSubSizeMinus(ByVal newSize As Integer)
   m_FontMinus = newSize
-  PropertyChanged "Caption1SizeMinus"
+  PropertyChanged "CaptionSubSizeMinus"
   Refresh
 End Property
 
-Public Property Get Caption1VDistance() As Integer
-  Caption1VDistance = m_C1VDistance
+Public Property Get CaptionSubVDistance() As Integer
+  CaptionSubVDistance = m_C1VDistance
 End Property
 
-Public Property Let Caption1VDistance(ByVal newDist As Integer)
+Public Property Let CaptionSubVDistance(ByVal newDist As Integer)
   m_C1VDistance = newDist
-  PropertyChanged "Caption1VDistance"
+  PropertyChanged "CaptionSubVDistance"
   Refresh
 End Property
 
-Public Property Get Caption2() As String
-    Caption2 = m_Caption2
+Public Property Get CaptionMain() As String
+    CaptionMain = m_Caption2
 End Property
 
-Public Property Let Caption2(ByVal New_Caption As String)
+Public Property Let CaptionMain(ByVal New_Caption As String)
     m_Caption2 = New_Caption
-    PropertyChanged "Caption2"
+    PropertyChanged "CaptionMain"
 
     Refresh
     Call Change(m_Caption2)
@@ -1681,4 +1707,17 @@ Public Property Let Value(ByVal New_Value As Boolean)
     If m_Value = True Then RaiseEvent Click
 End Property
 
+
+'ADVERTENCIA: NO QUITAR NI MODIFICAR LAS SIGUIENTES LINEAS CON COMENTARIOS
+'MemberInfo=0,0,0,False
+Public Property Get Glowing() As Boolean
+  Glowing = m_Glowing
+End Property
+
+Public Property Let Glowing(ByVal New_Glowing As Boolean)
+  m_Glowing = New_Glowing
+  PropertyChanged "Glowing"
+  tmrGlow.Enabled = New_Glowing
+  If Not New_Glowing Then m_BorderWidth = m_OldBorderWidth
+End Property
 
