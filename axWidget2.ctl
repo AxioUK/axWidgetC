@@ -37,15 +37,15 @@ Private Declare Function GdiAlphaBlend& Lib "gdi32" (ByVal hDC&, ByVal X&, ByVal
 Private BackBuf As cCairoSurface 'we use a BackBuffer in the same PixelSize as the Control (avoiding AutoRedraw=True on the Control itself)
 Private SVG As cSVG
 
-Private Declare Function SetCapture Lib "user32" (ByVal hwnd As Long) As Long
-Private Declare Function ReleaseCapture Lib "user32" () As Long
+'Private Declare Function SetCapture Lib "user32" (ByVal hwnd As Long) As Long
+'Private Declare Function ReleaseCapture Lib "user32" () As Long
 
 '===== FOR CUSTOM MOUSE CURSOR ===== ==================================================
 'Used to convert icons/bitmaps to stdPicture objects
 Private Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (lpPictDesc As PICTDESC, riid As Any, ByVal fOwn As Long, ipic As IPicture) As Long
 'Used to load the current hand cursor
 Private Declare Function LoadCursor Lib "user32.dll" Alias "LoadCursorA" (ByVal hInstance As Long, ByVal lpCursorName As Long) As Long
-Private Declare Function SetCursor Lib "user32.dll" (ByVal hCursor As Long) As Long
+'Private Declare Function SetCursor Lib "user32.dll" (ByVal hCursor As Long) As Long
 Private Const IDC_HAND As Long = 32649
 Private myHandCursor As StdPicture
 Private myHand_handle As Long
@@ -1707,9 +1707,6 @@ Public Property Let Value(ByVal New_Value As Boolean)
     If m_Value = True Then RaiseEvent Click
 End Property
 
-
-'ADVERTENCIA: NO QUITAR NI MODIFICAR LAS SIGUIENTES LINEAS CON COMENTARIOS
-'MemberInfo=0,0,0,False
 Public Property Get Glowing() As Boolean
   Glowing = m_Glowing
 End Property

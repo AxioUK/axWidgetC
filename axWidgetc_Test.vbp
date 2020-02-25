@@ -1,7 +1,7 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Form=frmExample_Admin.frm
-Object=*\AaxWidget.vbp
+Object={84ED9F1F-C719-43FC-9683-6C0265E667E9}#5.0#0; axWidget.ocx
 Form=frmExample.frm
 Form=MDIForm1.frm
 Startup="MDIForm1"
